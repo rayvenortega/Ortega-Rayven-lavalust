@@ -54,3 +54,4 @@ $router->post('/products/update/{id}', 'ProductController::update')
        ->where_number('id');
 $router->get('/products/delete/{id}', 'ProductController::delete')
        ->where_number('id');
+$route['default_controller'] = 'ProductController/index';

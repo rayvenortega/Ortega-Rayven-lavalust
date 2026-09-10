@@ -44,6 +44,7 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 */
 /** @var object $router **/
 
+$router->get('/', 'ProductController::index');
 
 $router->get('/products', 'ProductController::index');
 $router->get('/products/create', 'ProductController::create');
@@ -54,4 +55,3 @@ $router->post('/products/update/{id}', 'ProductController::update')
        ->where_number('id');
 $router->get('/products/delete/{id}', 'ProductController::delete')
        ->where_number('id');
-$route['default_controller'] = 'ProductController/index';

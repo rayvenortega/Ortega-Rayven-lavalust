@@ -34,23 +34,91 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-/*
-| -------------------------------------------------------------------
-| URI ROUTING
-| -------------------------------------------------------------------
-| Here is where you can register web routes for your application.
-|
-|
-*/
-/** @var object $router **/
+/**
+* ------------------------------------------------------
+*  Class Controller
+* ------------------------------------------------------
+ */
+class Controller
+{
+	/**
+	 * Controller Instance
+	 *
+	 * @var object
+	 */
+	private static $instance;
+	/**
+	 * Load class
+	 *
+	 * @var object
+	 */
+	public $call;
 
+	/**
+	 * Dynamic Properties using __set and __get
+	 *
+	 * @var array
+	 */
+	public $properties = [];
 
-$router->get('/products', 'ProductController::index');
-$router->get('/products/create', 'ProductController::create');
-$router->post('/products/store', 'ProductController::store');
-$router->get('/products/edit/{id}', 'ProductController::edit')
-       ->where_number('id');
-$router->post('/products/update/{id}', 'ProductController::update')
-       ->where_number('id');
-$router->get('/products/delete/{id}', 'ProductController::delete')
-       ->where_number('id');
+	/**
+	 * Set Dynamic Properties
+	 *
+	 * @param string $prop
+	 * @param string $val
+	 */
+	public function __set($prop, $val) {
+		$this->properties[$prop] = $val;
+	}
+
+	/**
+	 * Get Dynamic Properties
+	 *
+	 * @param string $prop
+	 * @return void
+	 */
+	public function __get($prop) {
+		if (array_key_exists($prop, $this->properties)) {
+			return $this->properties[$prop];
+		} else {
+			throw new Exception("Undefined property $prop in class " . get_class($this));
+		}
+	}
+
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		self::$instance = $this;
+
+		foreach (loaded_class() as $var => $class)
+		{
+			$this->properties[$var] = load_class($class);
+		}
+
+		$this->call = load_class('invoker', 'kernel');
+		$this->call->initialize();
+		$this->before_action();
+	}
+
+	/**
+     * Called before the controller action.
+     * Used to perform logic that needs to happen before each controller action.
+     *
+     */
+    public function before_action(){}
+
+	/**
+	 * Instance of controller
+	 *
+	 * @return object
+	 */
+	public static function instance()
+	{
+		return self::$instance;
+	}
+
+}
+
+?>

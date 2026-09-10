@@ -34,23 +34,39 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-/*
-| -------------------------------------------------------------------
-| URI ROUTING
-| -------------------------------------------------------------------
-| Here is where you can register web routes for your application.
-|
-|
-*/
-/** @var object $router **/
+if ( ! function_exists('lang'))
+{
+	/**
+	 * Use to translate text on you app in different languages
+	 *
+	 * @param string $key
+	 * @param array $params
+	 * @param boolean $escape
+	 * @return string
+	 */
+	function lang($key, $params = array(), $escape = FALSE)
+	{
+		$translated = lava_instance()->lang->translate($key, $params);
 
+		if($escape == TRUE)
+			return html_escape($translated);
+		else
+			return $translated;
+	}
+}
 
-$router->get('/products', 'ProductController::index');
-$router->get('/products/create', 'ProductController::create');
-$router->post('/products/store', 'ProductController::store');
-$router->get('/products/edit/{id}', 'ProductController::edit')
-       ->where_number('id');
-$router->post('/products/update/{id}', 'ProductController::update')
-       ->where_number('id');
-$router->get('/products/delete/{id}', 'ProductController::delete')
-       ->where_number('id');
+if ( ! function_exists('language'))
+{
+    /**
+     * Use to select the Language to use
+     *
+     * @param  string $lang
+     * @return object
+     */
+	function language($lang)
+	{
+		return lava_instance()->lang->language($lang);
+	}
+}
+
+?>

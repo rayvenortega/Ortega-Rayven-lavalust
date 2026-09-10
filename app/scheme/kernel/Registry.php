@@ -6,9 +6,9 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
  * ------------------------------------------------------------------
  *
  * MIT License
- *
+ * 
  * Copyright (c) 2020 Ronald M. Marasigan
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -34,23 +34,80 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-/*
-| -------------------------------------------------------------------
-| URI ROUTING
-| -------------------------------------------------------------------
-| Here is where you can register web routes for your application.
-|
-|
-*/
-/** @var object $router **/
+/**
+* ------------------------------------------------------
+*  Class Performance
+* ------------------------------------------------------
+ */
+class Registry
+{
+    /**
+     * Class name arrays
+     *
+     * @var array
+     */
+	private $_classes = array();
 
+    /**
+     * Instance
+     *
+     * @var object
+     */
+	private static $_instance;
+	
+    /**
+     * Get Instance of Registry
+     */
+    public static function instance()
+    {
+    	if(!isset(self::$_instance))
+        {
+            self::$_instance = new self();
+        }
+        return self::$_instance;
+    }
 
-$router->get('/products', 'ProductController::index');
-$router->get('/products/create', 'ProductController::create');
-$router->post('/products/store', 'ProductController::store');
-$router->get('/products/edit/{id}', 'ProductController::edit')
-       ->where_number('id');
-$router->post('/products/update/{id}', 'ProductController::update')
-       ->where_number('id');
-$router->get('/products/delete/{id}', 'ProductController::delete')
-       ->where_number('id');
+    /**
+     * Get
+     * @param string $key
+     * @return mixed
+     */
+    protected function get($key)
+    {
+    	
+        if(isset($this->_classes[$key]))
+        {	
+            return $this->_classes[$key];
+        }
+        return NULL;
+    }
+
+    /**
+     * @param string $key
+     * @param object $object
+     * @return void
+     */
+    protected function set($key, $object)
+    {
+        $this->_classes[$key] = $object;
+    }
+
+    /**
+     * @param string $key
+     * @return object
+     */
+    static function get_object($key)
+    {
+		return self::instance()->get($key);
+	}
+
+    /**
+     * @param string $key
+     * @param object $object
+     * @return object
+     */
+	static function store_object($key, $object)
+	{
+		return self::instance()->set($key, $object);
+	}
+}

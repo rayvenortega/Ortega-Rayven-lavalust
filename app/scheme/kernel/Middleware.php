@@ -1,5 +1,4 @@
 <?php
-defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 /**
  * ------------------------------------------------------------------
  * LavaLust - an opensource lightweight PHP MVC Framework
@@ -29,28 +28,75 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
  *
  * @package LavaLust
  * @author Ronald M. Marasigan <ronald.marasigan@yahoo.com>
- * @since Version 1
+ * @since Version 4
  * @link https://github.com/ronmarasigan/LavaLust
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-/*
-| -------------------------------------------------------------------
-| URI ROUTING
-| -------------------------------------------------------------------
-| Here is where you can register web routes for your application.
-|
-|
-*/
-/** @var object $router **/
+/**
+* ------------------------------------------------------
+*  Class Middleware
+* ------------------------------------------------------
+ */
+class Middleware
+{
+    /**
+     * Map
+     *
+     * @var array
+     */
+    protected $map = [];
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $config = get_config();
 
-$router->get('/products', 'ProductController::index');
-$router->get('/products/create', 'ProductController::create');
-$router->post('/products/store', 'ProductController::store');
-$router->get('/products/edit/{id}', 'ProductController::edit')
-       ->where_number('id');
-$router->post('/products/update/{id}', 'ProductController::update')
-       ->where_number('id');
-$router->get('/products/delete/{id}', 'ProductController::delete')
-       ->where_number('id');
+        if (!isset($config['middlewares'])) {
+            throw new RuntimeException('Middleware config not found.');
+        }
+
+        $this->map = $config['middlewares'];
+    }
+
+    /**
+     * Run the middleware pipeline
+     *
+     * @param array $middlewares
+     * @param Closure $destination
+     * @return mixed
+     */
+    public function run(array $middlewares, Closure $destination)
+    {
+        $pipeline = array_reduce(
+            array_reverse($middlewares),
+            function ($next, $middleware) {
+                return function () use ($middleware, $next) {
+                    return $this->resolve($middleware, $next);
+                };
+            },
+            $destination
+        );
+
+        return $pipeline();
+    }
+
+    /**
+     * Resolve a middleware
+     *
+     * @param string $middleware
+     * @param Closure $next
+     * @return mixed
+     */
+    protected function resolve($middleware, $next)
+    {
+        if (!isset($this->map[$middleware])) {
+            throw new Exception("Middleware [$middleware] not registered.");
+        }
+
+        return $this->map[$middleware]->handle($next);
+    }
+}
+

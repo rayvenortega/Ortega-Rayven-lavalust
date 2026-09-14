@@ -13,6 +13,21 @@
     <title>Product Management</title>
 
     <style>
+        :root {
+            --bg-1: #f7f1ff;
+            --bg-2: #efe4ff;
+            --panel: #ffffff;
+            --panel-alt: #f9f4ff;
+            --primary: #8b5cf6;
+            --primary-dark: #6d47d8;
+            --primary-soft: #f1e8ff;
+            --border: #e9ddff;
+            --text: #2d2344;
+            --muted: #6d5f8a;
+            --danger: #d946ef;
+            --danger-soft: #fdf0ff;
+            --shadow: rgba(109, 71, 216, 0.12);
+        }
 
         * {
             box-sizing: border-box;
@@ -20,20 +35,20 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: #eef5ff;
+            background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
             margin: 0;
             padding: 40px;
-            color: #1e293b;
+            color: var(--text);
         }
 
         .container {
             max-width: 1100px;
             margin: auto;
-            background: #ffffff;
+            background: var(--panel);
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.10);
-            border: 1px solid #dbeafe;
+            border-radius: 18px;
+            box-shadow: 0 18px 40px var(--shadow);
+            border: 1px solid var(--border);
         }
 
         .header {
@@ -41,27 +56,29 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
+            gap: 16px;
         }
 
         h1 {
             margin: 0;
-            color: #1e3a8a;
+            color: var(--primary-dark);
             font-size: 30px;
             font-weight: 700;
         }
 
         .add-btn {
-            background: #2563eb;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             padding: 11px 18px;
             text-decoration: none;
-            border-radius: 7px;
+            border-radius: 10px;
             font-weight: bold;
             transition: 0.2s;
+            box-shadow: 0 10px 18px rgba(109, 71, 216, 0.22);
         }
 
         .add-btn:hover {
-            background: #1d4ed8;
+            transform: translateY(-1px);
         }
 
         table {
@@ -69,26 +86,27 @@
             border-collapse: separate;
             border-spacing: 0;
             overflow: hidden;
-            border: 1px solid #dbeafe;
-            border-radius: 8px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #fff;
         }
 
         th,
         td {
             padding: 14px 12px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #f0e7ff;
             text-align: left;
         }
 
         th {
-            background: #eff6ff;
-            color: #1e3a8a;
+            background: var(--primary-soft);
+            color: var(--primary-dark);
             font-weight: 700;
-            border-bottom: 2px solid #bfdbfe;
+            border-bottom: 2px solid var(--border);
         }
 
         tbody tr:hover {
-            background: #f8fbff;
+            background: #faf7ff;
         }
 
         tbody tr:last-child td {
@@ -97,7 +115,7 @@
 
         td:last-child {
             white-space: nowrap;
-            width: 150px;
+            width: 180px;
         }
 
         .edit-btn,
@@ -105,7 +123,7 @@
             display: inline-block;
             padding: 8px 13px;
             text-decoration: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 14px;
             font-weight: 600;
             margin-right: 6px;
@@ -114,31 +132,26 @@
         }
 
         .edit-btn {
-            background: #2563eb;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
         }
 
-        .edit-btn:hover {
-            background: #1d4ed8;
-        }
-
         .delete-btn {
-            background: #ffffff;
-            color: #dc2626;
-            border: 1px solid #fecaca;
+            background: var(--danger-soft);
+            color: #8b4a8f;
+            border: 1px solid #f0d7f7;
         }
 
         .delete-btn:hover {
-            background: #fee2e2;
-            border-color: #fca5a5;
+            background: #fbe8ff;
+            border-color: #e7c9f4;
         }
 
         .empty {
             text-align: center;
             padding: 25px;
-            color: #64748b;
+            color: var(--muted);
         }
-
     </style>
 
 </head>
@@ -154,12 +167,14 @@
 
         <h1>Product Management</h1>
 
-        <a
-           <a href="<?php echo site_url('products/create'); ?>" 
-            class="btn btn-primary">
-        >
-            + Add Product
-        </a>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <a href="<?php echo site_url('products/create'); ?>" class="add-btn">
+                + Add Product
+            </a>
+            <a href="<?php echo site_url('logout'); ?>" class="delete-btn" style="margin-right: 0;" onclick="return confirm('Are you sure you want to log out?');">
+                Logout
+            </a>
+        </div>
 
     </div>
 

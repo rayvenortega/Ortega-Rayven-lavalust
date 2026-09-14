@@ -7,33 +7,46 @@
     <title>Add Product</title>
 
     <style>
+        :root {
+            --bg-1: #f7f1ff;
+            --bg-2: #efe4ff;
+            --panel: rgba(255, 255, 255, 0.96);
+            --primary: #8b5cf6;
+            --primary-dark: #6d47d8;
+            --primary-soft: #f1e8ff;
+            --border: #e9ddff;
+            --text: #2d2344;
+            --muted: #67598a;
+            --shadow: rgba(124, 92, 240, 0.15);
+        }
+
         * {
             box-sizing: border-box;
         }
 
         body {
             font-family: Arial, sans-serif;
-            background: #eef5ff;
+            background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
             margin: 0;
             padding: 40px;
-            color: #1e293b;
+            color: var(--text);
         }
 
         .container {
             max-width: 600px;
             margin: auto;
-            background: #ffffff;
+            background: var(--panel);
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.10);
-            border: 1px solid #dbeafe;
+            border-radius: 18px;
+            box-shadow: 0 18px 40px var(--shadow);
+            border: 1px solid var(--border);
         }
 
         h1 {
             margin-top: 0;
             margin-bottom: 25px;
             text-align: center;
-            color: #1e3a8a;
+            color: var(--primary-dark);
             font-size: 30px;
             font-weight: 700;
         }
@@ -41,32 +54,33 @@
         label {
             display: block;
             margin-bottom: 6px;
-            font-weight: bold;
-            color: #1e3a8a;
+            font-weight: 700;
+            color: var(--text);
         }
 
         input,
         textarea {
             width: 100%;
-            padding: 10px;
+            padding: 10px 12px;
             margin-bottom: 18px;
-            border: 1px solid #bfdbfe;
-            border-radius: 6px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
             font-size: 14px;
-            background: #ffffff;
-            color: #1e293b;
+            background: #fff;
+            color: var(--text);
             outline: none;
+            transition: all 0.2s ease;
         }
 
         input:focus,
         textarea:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.10);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.12);
         }
 
         input::placeholder,
         textarea::placeholder {
-            color: #94a3b8;
+            color: #a792c7;
         }
 
         textarea {
@@ -83,34 +97,35 @@
         button {
             border: none;
             padding: 11px 18px;
-            border-radius: 6px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
+            transition: transform 0.15s ease;
         }
 
         .save-btn {
-            background: #2563eb;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
+            box-shadow: 0 10px 18px rgba(109, 71, 216, 0.2);
         }
 
         .save-btn:hover {
-            background: #1d4ed8;
+            transform: translateY(-1px);
         }
 
         .back-btn {
             background: #ffffff;
-            color: #475569;
+            color: var(--muted);
             text-decoration: none;
             padding: 11px 18px;
-            border-radius: 6px;
-            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            border: 1px solid var(--border);
             font-weight: 600;
         }
 
         .back-btn:hover {
-            background: #f1f5f9;
-            border-color: #94a3b8;
+            background: var(--primary-soft);
         }
     </style>
 </head>
@@ -122,12 +137,13 @@
     <h1>Add Product</h1>
 
     <form action="<?= site_url('products/store'); ?>" method="POST">
+        <?= csrf_field(); ?>
 
         <label>Product Name</label>
-        <input type="text" name="product_name" placeholder="Enter product name" required>
+        <input type="text" name="product_name" maxlength="150" placeholder="Enter product name" required>
 
         <label>Description</label>
-        <textarea name="description" placeholder="Enter product description" required></textarea>
+        <textarea name="description" maxlength="1000" placeholder="Enter product description" required></textarea>
 
         <label>Price</label>
         <input type="number" name="price" step="0.01" min="0" placeholder="0.00" required>

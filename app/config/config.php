@@ -79,7 +79,12 @@ $config['environment'] = getenv('APP_ENV') ?: 'development';
 | WARNING: You MUST set this value!
 |
 */
-$config['base_url'] = 'https://ortega-rayven-lavalust.onrender.com/';
+$scheme = ((isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') ||
+    (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https'))
+    ? 'https' : 'http';
+
+$host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'] ?? 'localhost';
+$config['base_url'] = $scheme . '://' . $host . '/';
 
 /*
 |--------------------------------------------------------------------------
